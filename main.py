@@ -1,0 +1,321 @@
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+import networkx as nx
+from collections import deque
+import string
+
+
+class FlowNetwork:
+    def __init__(self, graph, source, sink):
+        """
+        Initialize a flow network
+
+        Args:
+            graph: A 2D list or numpy array where graph[u][v] is the capacity from u to v
+            source: Source vertex
+            sink: Sink vertex
+        """
+        self.graph = np.array(graph, dtype=float)
+        self.source = source
+        self.sink = sink
+        self.num_vertices = len(graph)
+
+        # Residual graph is initialized with the same capacities as original graph
+        self.residual_graph = self.graph.copy()
+
+        # Flow is initially 0
+        self.flow = np.zeros_like(self.graph)
+
+    def bfs(self):
+        """
+        Use BFS to find an augmenting path from source to sink in the residual graph
+
+        Returns:
+            path: List of vertices forming a path from source to sink, or None if no path exists
+        """
+        visited = [False] * self.num_vertices
+        parent = [-1] * self.num_vertices
+
+        queue = deque()
+        queue.append(self.source)
+        visited[self.source] = True
+
+        while queue:
+            u = queue.popleft()
+
+            for v in range(self.num_vertices):
+                if not visited[v] and self.residual_graph[u][v] > 0:
+                    queue.append(v)
+                    visited[v] = True
+                    parent[v] = u
+
+        # If we reached sink in BFS, then there is a path
+        if visited[self.sink]:
+            path = []
+            s = self.sink
+            while s != self.source:
+                path.append(s)
+                s = parent[s]
+            path.append(self.source)
+            path.reverse()
+            return path
+        else:
+            return None
+
+    def ford_fulkerson(self):
+        """
+        Implement the Ford-Fulkerson algorithm to find the maximum flow
+
+        Returns:
+            max_flow: The maximum flow from source to sink
+        """
+        path = self.bfs()
+
+        # While there is an augmenting path
+        while path:
+            # Find the minimum residual capacity along the path
+            min_capacity = float('inf')
+            for i in range(len(path) - 1):
+                u, v = path[i], path[i + 1]
+                min_capacity = min(min_capacity, self.residual_graph[u][v])
+
+            # Update residual capacities and reverse edges
+            for i in range(len(path) - 1):
+                u, v = path[i], path[i + 1]
+                self.residual_graph[u][v] -= min_capacity
+                self.residual_graph[v][u] += min_capacity
+                self.flow[u][v] += min_capacity
+
+            # Find next augmenting path
+            path = self.bfs()
+
+        # Calculate the maximum flow
+        max_flow = sum(self.flow[self.source])
+
+        return max_flow
+
+
+def generate_random_flow_network(num_vertices, min_capacity=1, max_capacity=10, density=0.3):
+    """
+    Generate a random flow network
+
+    Args:
+        num_vertices: Number of vertices in the network
+        min_capacity: Minimum capacity of an edge
+        max_capacity: Maximum capacity of an edge
+        density: Probability of an edge existing between any two vertices
+
+    Returns:
+        graph: Adjacency matrix representing the network
+        source: Source vertex index
+        sink: Sink vertex index
+    """
+    # Initialize with zeros
+    graph = np.zeros((num_vertices, num_vertices))
+
+    # Add random edges
+    for i in range(num_vertices):
+        for j in range(num_vertices):
+            if i != j and random.random() < density:
+                graph[i][j] = random.randint(min_capacity, max_capacity)
+
+    # Choose source and sink
+    vertices = list(range(num_vertices))
+    source = random.choice(vertices)
+    remaining = [v for v in vertices if v != source]
+    sink = random.choice(remaining)
+
+    return graph, source, sink
+
+
+def get_node_labels(num_vertices):
+    """
+    Generate letter labels for nodes
+
+    Args:
+        num_vertices: Number of vertices
+
+    Returns:
+        Dictionary mapping node indices to letter labels
+    """
+    # Use uppercase letters first, then lowercase, then combinations if needed
+    labels = {}
+    uppercase = list(string.ascii_uppercase)
+    lowercase = list(string.ascii_lowercase)
+
+    for i in range(num_vertices):
+        if i < len(uppercase):
+            labels[i] = uppercase[i]
+        elif i < len(uppercase) + len(lowercase):
+            labels[i] = lowercase[i - len(uppercase)]
+        else:
+            # For more than 52 nodes, start using combinations
+            primary = (i - len(uppercase) - len(lowercase)) // len(uppercase) + 1
+            secondary = (i - len(uppercase) - len(lowercase)) % len(uppercase)
+            labels[i] = uppercase[primary - 1] + uppercase[secondary]
+
+    return labels
+
+
+def visualize_network(graph, source, sink, flow=None):
+    """
+    Visualize the flow network with letter labels for nodes
+
+    Args:
+        graph: Adjacency matrix of the network
+        source: Source vertex index
+        sink: Sink vertex index
+        flow: Optional flow matrix to show current flow values
+    """
+    G = nx.DiGraph()
+
+    n = len(graph)
+    node_labels = get_node_labels(n)
+
+    # Add nodes with letter labels
+    for i in range(n):
+        G.add_node(i, label=node_labels[i])
+
+    # Add edges
+    for i in range(n):
+        for j in range(n):
+            if graph[i][j] > 0:
+                if flow is not None:
+                    G.add_edge(i, j, capacity=graph[i][j], flow=flow[i][j],
+                               label=f"{flow[i][j]}/{graph[i][j]}")
+                else:
+                    G.add_edge(i, j, capacity=graph[i][j],
+                               label=f"{graph[i][j]}")
+
+    # Position nodes using spring layout
+    pos = nx.spring_layout(G)
+
+    # Draw nodes
+    node_colors = ['lightgreen' if node == source else 'lightblue' if node == sink else 'lightgray' for node in
+                   G.nodes()]
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=500)
+
+    # Draw edges
+    nx.draw_networkx_edges(G, pos, arrowsize=20)
+
+    # Draw node labels using the letter labels
+    node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
+    nx.draw_networkx_labels(G, pos, labels=node_label_dict)
+
+    # Draw edge labels
+    edge_labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+
+    source_label = node_labels[source]
+    sink_label = node_labels[sink]
+    plt.title(f"Flow Network (Source: {source_label}, Sink: {sink_label})")
+    plt.axis('off')
+    plt.show()
+
+
+def print_network_info(graph, source, sink, node_labels, max_flow=None):
+    """
+    Print information about the network using letter labels
+    """
+    print(f"Source: {node_labels[source]}, Sink: {node_labels[sink]}")
+    if max_flow is not None:
+        print(f"Maximum Flow: {max_flow}")
+
+    print("\nCapacities:")
+    # Print header row with letter labels
+    header = "    " + " ".join(f"{node_labels[j]:>4}" for j in range(len(graph)))
+    print(header)
+
+    # Print capacity matrix with row labels
+    for i in range(len(graph)):
+        row = f"{node_labels[i]:2}" + " " + " ".join(f"{graph[i][j]:4.0f}" for j in range(len(graph)))
+        print(row)
+
+
+def test_with_different_configurations():
+    """
+    Test the Ford-Fulkerson implementation with different network configurations
+    """
+    # Test 1: Small network
+    print("Test 1: Small network (5 vertices)")
+    graph, source, sink = generate_random_flow_network(5, max_capacity=15, density=0.4)
+    network = FlowNetwork(graph, source, sink)
+    node_labels = get_node_labels(len(graph))
+
+    print_network_info(graph, source, sink, node_labels)
+
+    max_flow = network.ford_fulkerson()
+    print(f"Maximum Flow: {max_flow}")
+
+    visualize_network(graph, source, sink, network.flow)
+
+    # Test 2: Medium network
+    print("\nTest 2: Medium network (10 vertices)")
+    graph, source, sink = generate_random_flow_network(10, max_capacity=20, density=0.3)
+    network = FlowNetwork(graph, source, sink)
+    node_labels = get_node_labels(len(graph))
+
+    print_network_info(graph, source, sink, node_labels)
+    max_flow = network.ford_fulkerson()
+    print(f"Maximum Flow: {max_flow}")
+
+    visualize_network(graph, source, sink, network.flow)
+
+    # Test 3: Large network
+    print("\nTest 3: Large network (15 vertices)")
+    graph, source, sink = generate_random_flow_network(15, max_capacity=30, density=0.2)
+    network = FlowNetwork(graph, source, sink)
+    node_labels = get_node_labels(len(graph))
+
+    print_network_info(graph, source, sink, node_labels)
+    max_flow = network.ford_fulkerson()
+    print(f"Maximum Flow: {max_flow}")
+
+    visualize_network(graph, source, sink, network.flow)
+
+
+def custom_test():
+    """
+    Create a custom test with user-defined parameters
+    """
+    num_vertices = int(input("Enter number of vertices: "))
+    min_capacity = int(input("Enter minimum capacity: "))
+    max_capacity = int(input("Enter maximum capacity: "))
+    density = float(input("Enter network density (0.0-1.0): "))
+
+    graph, source, sink = generate_random_flow_network(
+        num_vertices, min_capacity, max_capacity, density
+    )
+
+    network = FlowNetwork(graph, source, sink)
+    node_labels = get_node_labels(num_vertices)
+
+    print_network_info(graph, source, sink, node_labels)
+
+    max_flow = network.ford_fulkerson()
+    print(f"Maximum Flow: {max_flow}")
+
+    visualize_network(graph, source, sink, network.flow)
+
+
+if __name__ == "__main__":
+    print("Ford-Fulkerson Maximum Flow Algorithm")
+    print("------------------------------------")
+
+    while True:
+        print("\nOptions:")
+        print("1. Run predefined tests with different network configurations")
+        print("2. Create a custom random network")
+        print("3. Exit")
+
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == '1':
+            test_with_different_configurations()
+        elif choice == '2':
+            custom_test()
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice. Please try again.")
