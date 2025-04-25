@@ -160,7 +160,7 @@ def get_node_labels(num_vertices):
 
 def visualize_network(graph, source, sink, flow=None):
     """
-    Visualize the flow network with letter labels for nodes
+    Visualize the flow network with letter labels for nodes and improved edge label visibility
 
     Args:
         graph: Adjacency matrix of the network
@@ -168,6 +168,7 @@ def visualize_network(graph, source, sink, flow=None):
         sink: Sink vertex index
         flow: Optional flow matrix to show current flow values
     """
+    plt.figure(figsize=(12, 10))  # Larger figure size
     G = nx.DiGraph()
 
     n = len(graph)
@@ -183,34 +184,42 @@ def visualize_network(graph, source, sink, flow=None):
             if graph[i][j] > 0:
                 if flow is not None:
                     G.add_edge(i, j, capacity=graph[i][j], flow=flow[i][j],
-                               label=f"{flow[i][j]}/{graph[i][j]}")
+                               label=f"{flow[i][j]:.0f}/{graph[i][j]:.0f}")
                 else:
                     G.add_edge(i, j, capacity=graph[i][j],
-                               label=f"{graph[i][j]}")
+                               label=f"{graph[i][j]:.0f}")
 
-    # Position nodes using spring layout
-    pos = nx.spring_layout(G)
+    # Use kamada_kawai_layout for better spacing between nodes
+    pos = nx.kamada_kawai_layout(G)
 
-    # Draw nodes
+    # Draw nodes with increased size
     node_colors = ['lightgreen' if node == source else 'lightblue' if node == sink else 'lightgray' for node in
                    G.nodes()]
-    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=500)
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=700, edgecolors='black')
 
-    # Draw edges
-    nx.draw_networkx_edges(G, pos, arrowsize=20)
+    # Draw edges with more spacing
+    nx.draw_networkx_edges(G, pos, arrowsize=20, width=1.5)
 
-    # Draw node labels using the letter labels
+    # Draw node labels with larger font
     node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
-    nx.draw_networkx_labels(G, pos, labels=node_label_dict)
+    nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
 
-    # Draw edge labels
+    # Draw edge labels with improved visibility
     edge_labels = nx.get_edge_attributes(G, 'label')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
+                                 font_size=14,
+                                 font_color='darkred',
+                                 bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=2),
+                                 font_weight='bold',
+                                 label_pos=0.5)
 
     source_label = node_labels[source]
     sink_label = node_labels[sink]
-    plt.title(f"Flow Network (Source: {source_label}, Sink: {sink_label})")
+    plt.title(f"Flow Network (Source: {source_label}, Sink: {sink_label})", fontsize=18)
     plt.axis('off')
+
+    # Adjust layout to prevent clipping
+    plt.tight_layout()
     plt.show()
 
 
@@ -251,8 +260,8 @@ def test_with_different_configurations():
     visualize_network(graph, source, sink, network.flow)
 
     # Test 2: Medium network
-    print("\nTest 2: Medium network (10 vertices)")
-    graph, source, sink = generate_random_flow_network(10, max_capacity=20, density=0.3)
+    print("\nTest 2: Medium network (8 vertices)")
+    graph, source, sink = generate_random_flow_network(8, max_capacity=20, density=0.3)
     network = FlowNetwork(graph, source, sink)
     node_labels = get_node_labels(len(graph))
 
@@ -263,8 +272,8 @@ def test_with_different_configurations():
     visualize_network(graph, source, sink, network.flow)
 
     # Test 3: Large network
-    print("\nTest 3: Large network (15 vertices)")
-    graph, source, sink = generate_random_flow_network(15, max_capacity=30, density=0.2)
+    print("\nTest 3: Large network (12 vertices)")
+    graph, source, sink = generate_random_flow_network(12, max_capacity=30, density=0.2)
     network = FlowNetwork(graph, source, sink)
     node_labels = get_node_labels(len(graph))
 
