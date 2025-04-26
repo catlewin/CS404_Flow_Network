@@ -15,8 +15,11 @@ def run_predefined_tests():
         labels = get_node_labels(n)
 
         print_network_info(graph, source, sink, labels)
-        max_flow = network.ford_fulkerson()
+
+        max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
         print(f"Maximum Flow: {max_flow}")
+        print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
+
         visualize_network(graph, source, sink, network.flow, max_flow)
 
 
@@ -35,8 +38,11 @@ def run_custom_test():
     labels = get_node_labels(n)
 
     print_network_info(graph, source, sink, labels)
-    max_flow = network.ford_fulkerson()
+
+    max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
     print(f"Maximum Flow: {max_flow}")
+    print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
+
     visualize_network(graph, source, sink, network.flow, max_flow)
 
 

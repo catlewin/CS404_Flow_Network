@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from collections import deque
 import string
-
+import time
 
 class FlowNetwork:
     def __init__(self, graph, source, sink):
@@ -152,3 +152,57 @@ def print_network_info(graph, source, sink, labels, max_flow=None):
     for i in range(len(graph)):
         row = f"{labels[i]:2} " + " ".join(f"{graph[i][j]:4.0f}" for j in range(len(graph)))
         print(row)
+
+
+
+class FlowNetwork:
+    def __init__(self, graph, source, sink):
+        self.graph = np.array(graph, dtype=float)
+        self.source = source
+        self.sink = sink
+        self.num_vertices = len(graph)
+        self.residual_graph = self.graph.copy()
+        self.flow = np.zeros_like(self.graph)
+
+    def bfs(self):
+        visited = [False] * self.num_vertices
+        parent = [-1] * self.num_vertices
+        queue = deque([self.source])
+        visited[self.source] = True
+
+        while queue:
+            u = queue.popleft()
+            for v in range(self.num_vertices):
+                if not visited[v] and self.residual_graph[u][v] > 0:
+                    queue.append(v)
+                    visited[v] = True
+                    parent[v] = u
+
+        if visited[self.sink]:
+            path = []
+            s = self.sink
+            while s != self.source:
+                path.append(s)
+                s = parent[s]
+            path.append(self.source)
+            path.reverse()
+            return path
+        return None
+
+    def ford_fulkerson(self):
+        start_time = time.time()  # Start the timer
+
+        path = self.bfs()
+        while path:
+            min_capacity = min(self.residual_graph[path[i]][path[i + 1]] for i in range(len(path) - 1))
+            for i in range(len(path) - 1):
+                u, v = path[i], path[i + 1]
+                self.residual_graph[u][v] -= min_capacity
+                self.residual_graph[v][u] += min_capacity
+                self.flow[u][v] += min_capacity
+            path = self.bfs()
+
+        end_time = time.time()  # End the timer
+        execution_time = end_time - start_time  # Calculate execution time
+
+        return sum(self.flow[self.source]), execution_time  # Return both max flow and execution time
