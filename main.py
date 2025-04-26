@@ -1,4 +1,5 @@
-from flow_network import FlowNetwork, generate_random_flow_network, get_node_labels, print_network_info, visualize_network
+from flow_network import FlowNetwork, generate_random_flow_network, get_node_labels, print_network_info
+from epidemic_network import EpidemicNetwork, generate_random_epidemic_network, test_epidemic_simulation
 
 
 def run_predefined_tests():
@@ -20,7 +21,8 @@ def run_predefined_tests():
         print(f"Maximum Flow: {max_flow}")
         print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
 
-        visualize_network(graph, source, sink, network.flow, max_flow)
+        network.visualize_network()
+
 
 
 def run_custom_test():
@@ -43,7 +45,6 @@ def run_custom_test():
     print(f"Maximum Flow: {max_flow}")
     print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
 
-    visualize_network(graph, source, sink, network.flow, max_flow)
 
 
 def main():
@@ -55,18 +56,22 @@ def main():
         print("\nOptions:")
         print("1. Run predefined tests")
         print("2. Create a custom random network")
-        print("3. Exit")
-        choice = input("Enter your choice (1-3): ").strip()
+        print("3. Run Epidemic Network Simulation")
+        print("4. Exit")
+        choice = input("Enter your choice (1-4): ").strip()
 
         if choice == '1':
             run_predefined_tests()
         elif choice == '2':
             run_custom_test()
         elif choice == '3':
+            print("\nRunning Epidemic Network Simulation...")
+            test_epidemic_simulation()  # Call the function to simulate the epidemic network
+        elif choice == '4':
             print("Exiting. Thank you for using the app!")
             break
         else:
-            print("Invalid choice. Please enter 1, 2, or 3.")
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
 
 if __name__ == "__main__":
