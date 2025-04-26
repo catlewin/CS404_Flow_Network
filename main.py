@@ -98,7 +98,7 @@ class FlowNetwork:
 
 def generate_random_flow_network(num_vertices, min_capacity=1, max_capacity=10, density=0.3):
     """
-    Generate a random flow network
+    Generate a random flow network with at least one path from source to sink
 
     Args:
         num_vertices: Number of vertices in the network
@@ -114,19 +114,70 @@ def generate_random_flow_network(num_vertices, min_capacity=1, max_capacity=10, 
     # Initialize with zeros
     graph = np.zeros((num_vertices, num_vertices))
 
-    # Add random edges
-    for i in range(num_vertices):
-        for j in range(num_vertices):
-            if i != j and random.random() < density:
-                graph[i][j] = random.randint(min_capacity, max_capacity)
-
     # Choose source and sink
     vertices = list(range(num_vertices))
     source = random.choice(vertices)
     remaining = [v for v in vertices if v != source]
     sink = random.choice(remaining)
 
+    # Ensure there's at least one path from source to sink
+    # Create a random path from source to sink
+    current = source
+    path_length = min(random.randint(2, num_vertices), num_vertices - 1)
+
+    # Create vertices in the path
+    path_vertices = [source]
+    available_vertices = [v for v in range(num_vertices) if v != source and v != sink]
+
+    # Select some random intermediate vertices for the path
+    if len(available_vertices) > 0 and path_length > 2:
+        num_intermediate = min(path_length - 2, len(available_vertices))
+        intermediate_vertices = random.sample(available_vertices, num_intermediate)
+        path_vertices.extend(intermediate_vertices)
+
+    path_vertices.append(sink)
+
+    # Create edges along this path with random capacities
+    for i in range(len(path_vertices) - 1):
+        u = path_vertices[i]
+        v = path_vertices[i + 1]
+        graph[u][v] = random.randint(min_capacity, max_capacity)
+
+    # Add additional random edges
+    for i in range(num_vertices):
+        for j in range(num_vertices):
+            if i != j and graph[i][j] == 0 and random.random() < density:  # Only add edge if it doesn't exist
+                graph[i][j] = random.randint(min_capacity, max_capacity)
+
     return graph, source, sink
+
+
+def is_path_exists(graph, source, sink):
+    """
+    Check if there's a path from source to sink in the graph
+
+    Args:
+        graph: Adjacency matrix of the network
+        source: Source vertex index
+        sink: Sink vertex index
+
+    Returns:
+        True if path exists, False otherwise
+    """
+    n = len(graph)
+    visited = [False] * n
+
+    def dfs(u):
+        if u == sink:
+            return True
+        visited[u] = True
+        for v in range(n):
+            if not visited[v] and graph[u][v] > 0:
+                if dfs(v):
+                    return True
+        return False
+
+    return dfs(source)
 
 
 def get_node_labels(num_vertices):
@@ -158,7 +209,7 @@ def get_node_labels(num_vertices):
     return labels
 
 
-def visualize_network(graph, source, sink, flow=None):
+def visualize_network(graph, source, sink, flow=None, max_flow=None):
     """
     Visualize the flow network with letter labels for nodes and improved edge label visibility
 
@@ -167,6 +218,7 @@ def visualize_network(graph, source, sink, flow=None):
         source: Source vertex index
         sink: Sink vertex index
         flow: Optional flow matrix to show current flow values
+        max_flow: Maximum flow value to display in the title
     """
     plt.figure(figsize=(12, 10))  # Larger figure size
     G = nx.DiGraph()
@@ -205,7 +257,15 @@ def visualize_network(graph, source, sink, flow=None):
     nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
 
     # Draw edge labels with improved visibility
-    edge_labels = nx.get_edge_attributes(G, 'label')
+    # Compute dynamic edge labels showing net flow/capacity
+    edge_labels = {}
+    for u, v, data in G.edges(data=True):
+        forward_flow = data.get('flow', 0)
+        backward_flow = G.edges[v, u]['flow'] if G.has_edge(v, u) else 0
+        net_flow = forward_flow - backward_flow
+        edge_labels[(u, v)] = f"{net_flow}/{data['capacity']}"
+
+    # Now draw the edge labels
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
                                  font_size=14,
                                  font_color='darkred',
@@ -215,7 +275,23 @@ def visualize_network(graph, source, sink, flow=None):
 
     source_label = node_labels[source]
     sink_label = node_labels[sink]
-    plt.title(f"Flow Network (Source: {source_label}, Sink: {sink_label})", fontsize=18)
+
+    # Create title with max flow information if available
+    if max_flow is not None:
+        title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
+    else:
+        title = f"Flow Network (Source: {source_label}, Sink: {sink_label})"
+
+    plt.title(title, fontsize=18)
+
+    # Add a text box showing the maximum flow value
+    if max_flow is not None:
+        # Add a text box at the bottom of the plot
+        text_box = f"Maximum Flow: {max_flow:.0f}"
+        plt.figtext(0.5, 0.01, text_box, fontsize=16,
+                    bbox=dict(facecolor='lightgreen', edgecolor='green', boxstyle='round,pad=0.5'),
+                    ha='center')
+
     plt.axis('off')
 
     # Adjust layout to prevent clipping
@@ -230,6 +306,10 @@ def print_network_info(graph, source, sink, node_labels, max_flow=None):
     print(f"Source: {node_labels[source]}, Sink: {node_labels[sink]}")
     if max_flow is not None:
         print(f"Maximum Flow: {max_flow}")
+
+    # Check if a path exists
+    path_exists = is_path_exists(graph, source, sink)
+    print(f"Path exists from source to sink: {path_exists}")
 
     print("\nCapacities:")
     # Print header row with letter labels
@@ -257,7 +337,7 @@ def test_with_different_configurations():
     max_flow = network.ford_fulkerson()
     print(f"Maximum Flow: {max_flow}")
 
-    visualize_network(graph, source, sink, network.flow)
+    visualize_network(graph, source, sink, network.flow, max_flow)
 
     # Test 2: Medium network
     print("\nTest 2: Medium network (8 vertices)")
@@ -269,7 +349,7 @@ def test_with_different_configurations():
     max_flow = network.ford_fulkerson()
     print(f"Maximum Flow: {max_flow}")
 
-    visualize_network(graph, source, sink, network.flow)
+    visualize_network(graph, source, sink, network.flow, max_flow)
 
     # Test 3: Large network
     print("\nTest 3: Large network (12 vertices)")
@@ -281,7 +361,7 @@ def test_with_different_configurations():
     max_flow = network.ford_fulkerson()
     print(f"Maximum Flow: {max_flow}")
 
-    visualize_network(graph, source, sink, network.flow)
+    visualize_network(graph, source, sink, network.flow, max_flow)
 
 
 def custom_test():
@@ -305,7 +385,7 @@ def custom_test():
     max_flow = network.ford_fulkerson()
     print(f"Maximum Flow: {max_flow}")
 
-    visualize_network(graph, source, sink, network.flow)
+    visualize_network(graph, source, sink, network.flow, max_flow)
 
 
 if __name__ == "__main__":
