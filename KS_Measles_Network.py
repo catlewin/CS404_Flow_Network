@@ -71,17 +71,17 @@ for county, data in counties.items():
 
 # Define adjacency with capacity values
 adjacency = {
-    "Finney": [("Kearny", 3), ("Gray", 4), ("Haskell", 5), ("Grant", 4), ("Scott", 3), ("Lane", 3),
-               ("Ness", 3), ("Hodgeman", 3)],
-    "Ford": [("Gray", 4), ("Hodgeman", 3), ("Kiowa", 4), ("Edwards", 3), ("Clark", 3), ("Meade", 3)],
-    "Grant": [("Finney", 3), ("Kearny", 3), ("Stanton", 3), ("Hamilton", 3) ,("Haskell", 4),
-              ("Stevens", 4), ("Morton", 4), ("Seward", 3)],
-    "Gray": [("Finney", 5), ("Haskell", 6), ("Hodgeman", 3), ("Ford", 5), ("Meade", 4)],
-    "Haskell": [("Finney", 6), ("Gray", 7), ("Kearny", 3), ("Seward", 6), ("Stevens", 7), ("Grant", 6),
+    "Finney": [("Kearny", 2), ("Gray", 2), ("Haskell", 2), ("Grant", 2), ("Scott", 2), ("Lane", 2),
+               ("Ness", 2), ("Hodgeman", 2)],
+    "Ford": [("Gray", 2), ("Hodgeman", 2), ("Kiowa", 2), ("Edwards", 2), ("Clark", 2), ("Meade", 1)],
+    "Grant": [("Finney", 1), ("Kearny", 2), ("Stanton", 2), ("Hamilton", 1) ,("Haskell", 2),
+              ("Stevens", 2), ("Morton", 1), ("Seward", 1)],
+    "Gray": [("Finney", 6), ("Haskell", 6), ("Hodgeman", 3), ("Ford", 6), ("Meade", 6)],
+    "Haskell": [("Finney", 10), ("Gray", 10), ("Kearny", 5), ("Seward", 10), ("Stevens", 5), ("Grant", 10),
                 ("Meade",3)],
-    "Kiowa": [("Barber", 2), ("Ford", 5), ("Edwards", 4), ("Comanche", 4), ("Clark", 4), ("Pratt", 5)],
-    "Morton": [("Stanton", 3), ("Grant", 4), ("Stevens", 4)],
-    "Stevens": [("Morton", 4), ("Grant", 5), ("Haskell", 6), ("Seward", 5), ("Stanton", 2)]
+    "Kiowa": [("Barber", 3), ("Ford", 6), ("Edwards", 6), ("Comanche", 6), ("Clark", 3), ("Pratt", 6)],
+    "Morton": [("Stanton", 2), ("Grant", 1), ("Stevens", 2)],
+    "Stevens": [("Morton", 8), ("Grant", 8), ("Haskell", 4), ("Seward", 8), ("Stanton", 4)]
 }
 
 # Add edges to the graph with population-weighted capacities
