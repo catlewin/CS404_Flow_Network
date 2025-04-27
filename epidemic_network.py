@@ -94,7 +94,7 @@ class EpidemicNetwork(FlowNetwork):
         Visualize the epidemic network showing infected paths
         """
         # Call the parent class's visualize method
-        super().visualize_network()
+        super().visualize_network(flow=self.flow, max_flow=max_flow)
 
         # Display the infected nodes after the epidemic simulation
         print(f"Infected nodes: {self.infected_nodes}")
@@ -176,5 +176,5 @@ def test_epidemic_simulation():
     print(f"\nMaximum number of infected nodes: {max_infected}")
 
     # Visualize the epidemic network
-    epidemic_network.visualize_network()  # You can customize visualization if needed
+    epidemic_network.visualize_network(epidemic_network.flow, max_infected)  # You can customize visualization if needed
 

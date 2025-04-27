@@ -21,7 +21,6 @@ def run_predefined_tests():
         print(f"Maximum Flow: {max_flow}")
         print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
 
-        network.visualize_network()
 
 
 

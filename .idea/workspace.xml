@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Fixed Measles application." />
+    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Fixed Measles application.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/epidemic_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/epidemic_network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flow_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/flow_network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,7 +93,7 @@
       <workItem from="1745705960587" duration="6969000" />
       <workItem from="1745768447524" duration="95000" />
       <workItem from="1745768613817" duration="240000" />
-      <workItem from="1745768868139" duration="4102000" />
+      <workItem from="1745768868139" duration="5047000" />
     </task>
     <task id="LOCAL-00001" summary="no dif">
       <option name="closed" value="true" />
@@ -176,8 +181,8 @@
     <SUITE FILE_PATH="coverage/PythonProject$main.coverage" NAME="main Coverage Results" MODIFIED="1745592390630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$flow_network.coverage" NAME="flow_network Coverage Results" MODIFIED="1745711431497" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$TEST.coverage" NAME="TEST Coverage Results" MODIFIED="1745770735849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS404_Flow_Network$epidemic_network.coverage" NAME="epidemic_network Coverage Results" MODIFIED="1745709709752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745711437214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$epidemic_network.coverage" NAME="epidemic_network Coverage Results" MODIFIED="1745774852357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$KS_Measles_Network.coverage" NAME="KS_Measles_Network Coverage Results" MODIFIED="1745773424181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745774855301" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
