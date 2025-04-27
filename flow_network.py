@@ -118,6 +118,7 @@ class FlowNetwork:
         source_label = node_labels[self.source]
         sink_label = node_labels[self.sink]
 
+        # Update title to include max_flow if it's available
         if max_flow is not None:
             title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
         else:
@@ -125,6 +126,7 @@ class FlowNetwork:
 
         plt.title(title, fontsize=18)
 
+        # If max_flow is provided, display it in a text box at the bottom of the graph
         if max_flow is not None:
             text_box = f"Maximum Flow: {max_flow:.0f}"
             plt.figtext(0.5, 0.01, text_box, fontsize=16,
