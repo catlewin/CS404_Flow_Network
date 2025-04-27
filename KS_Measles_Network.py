@@ -1,27 +1,33 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from matplotlib.patches import Polygon
 import matplotlib.patches as mpatches
 
 # Process the population data
 population_data = {
-    "Finney": 38354,
-    "Ford": 34072,
-    "Grant": 7097,
-    "Gray": 5730,
-    "Haskell": 3591,
-    "Kiowa": 2436,
-    "Morton": 2485,
-    "Stevens": 5035,
-    "Kearny": 3808,
-    "Hodgeman": 1673,
-    "Edwards": 2731,
-    "Stanton": 2071,
-    "Seward": 21276,
+    "Barber": 4233,
     "Clark": 1873,
-    "Comanche": 1694
+    "Comanche": 1694,
+    "Edwards": 2902,
+    "Finney": 38469,
+    "Ford": 34072,
+    "Grant": 7352,
+    "Gray": 5730,
+    "Haskell": 3781,
+    "Hamilton": 2517,
+    "Hodgeman": 1721,
+    "Kearny": 3980,
+    "Kiowa": 2436,
+    "Lane": 1575,
+    "Meade": 4063,
+    "Morton": 2485,
+    "Ness": 2687,
+    "Pratt": 9149,
+    "Stanton": 2086,
+    "Seward": 21276,
+    "Scott": 5145,
+    "Stevens": 5035
 }
 
 # Create a directed graph for flow analysis
@@ -38,13 +44,20 @@ counties = {
     "Morton": {"cases": 3, "status": "Outbreak", "population": population_data["Morton"]},
     "Stevens": {"cases": 7, "status": "Outbreak", "population": population_data["Stevens"]},
     # Adding surrounding counties
-    "Kearny": {"cases": 0, "status": "Surrounding", "population": population_data["Kearny"]},
-    "Hodgeman": {"cases": 0, "status": "Surrounding", "population": population_data["Hodgeman"]},
+    "Barber": {"cases": 0, "status": "Surrounding", "population": population_data["Barber"]},
+    "Clark": {"cases": 0, "status": "Surrounding", "population": population_data["Clark"]},
+    "Comanche": {"cases": 0, "status": "Surrounding", "population": population_data["Comanche"]},
     "Edwards": {"cases": 0, "status": "Surrounding", "population": population_data["Edwards"]},
+    "Hamilton": {"cases": 0, "status": "Surrounding", "population": population_data["Hamilton"]},
+    "Hodgeman": {"cases": 0, "status": "Surrounding", "population": population_data["Hodgeman"]},
+    "Kearny": {"cases": 0, "status": "Surrounding", "population": population_data["Kearny"]},
+    "Lane": {"cases": 0, "status": "Surrounding", "population": population_data["Lane"]},
+    "Meade": {"cases": 0, "status": "Surrounding", "population": population_data["Meade"]},
+    "Ness": {"cases": 0, "status": "Surrounding", "population": population_data["Ness"]},
+    "Scott": {"cases": 0, "status": "Surrounding", "population": population_data["Scott"]},
     "Stanton": {"cases": 0, "status": "Surrounding", "population": population_data["Stanton"]},
     "Seward": {"cases": 0, "status": "Surrounding", "population": population_data["Seward"]},
-    "Clark": {"cases": 0, "status": "Surrounding", "population": population_data["Clark"]},
-    "Comanche": {"cases": 0, "status": "Surrounding", "population": population_data["Comanche"]}
+    "Pratt": {"cases": 0, "status": "Surrounding", "population": population_data["Pratt"]}
 }
 
 # Calculate population-based metrics
@@ -58,14 +71,17 @@ for county, data in counties.items():
 
 # Define adjacency with capacity values
 adjacency = {
-    "Finney": [("Kearny", 3), ("Gray", 4), ("Haskell", 5), ("Grant", 4)],
-    "Ford": [("Gray", 4), ("Hodgeman", 3), ("Kiowa", 4), ("Edwards", 3)],
-    "Grant": [("Stanton", 3), ("Haskell", 4), ("Stevens", 4), ("Morton", 4)],
-    "Gray": [("Finney", 5), ("Haskell", 6), ("Ford", 5)],
-    "Haskell": [("Finney", 6), ("Gray", 7), ("Ford", 7), ("Seward", 6), ("Stevens", 7), ("Grant", 6)],
-    "Kiowa": [("Ford", 5), ("Edwards", 4), ("Comanche", 4), ("Clark", 4)],
+    "Finney": [("Kearny", 3), ("Gray", 4), ("Haskell", 5), ("Grant", 4), ("Scott", 3), ("Lane", 3),
+               ("Ness", 3), ("Hodgeman", 3)],
+    "Ford": [("Gray", 4), ("Hodgeman", 3), ("Kiowa", 4), ("Edwards", 3), ("Clark", 3), ("Meade", 3)],
+    "Grant": [("Finney", 3), ("Kearny", 3), ("Stanton", 3), ("Hamilton", 3) ,("Haskell", 4),
+              ("Stevens", 4), ("Morton", 4), ("Seward", 3)],
+    "Gray": [("Finney", 5), ("Haskell", 6), ("Hodgeman", 3), ("Ford", 5), ("Meade", 4)],
+    "Haskell": [("Finney", 6), ("Gray", 7), ("Kearny", 3), ("Seward", 6), ("Stevens", 7), ("Grant", 6),
+                ("Meade",3)],
+    "Kiowa": [("Barber", 2), ("Ford", 5), ("Edwards", 4), ("Comanche", 4), ("Clark", 4), ("Pratt", 5)],
     "Morton": [("Stanton", 3), ("Grant", 4), ("Stevens", 4)],
-    "Stevens": [("Morton", 4), ("Grant", 5), ("Haskell", 6), ("Seward", 5)]
+    "Stevens": [("Morton", 4), ("Grant", 5), ("Haskell", 6), ("Seward", 5), ("Stanton", 2)]
 }
 
 # Add edges to the graph with population-weighted capacities
@@ -96,7 +112,7 @@ county_positions = {
     # Outbreak counties
     "Finney": (3, 3),
     "Ford": (5, 3),
-    "Grant": (2, 2),
+    "Grant": (2, 3),
     "Gray": (4, 3),
     "Haskell": (3, 2),
     "Kiowa": (6, 2),
@@ -104,13 +120,20 @@ county_positions = {
     "Stevens": (2, 1),
 
     # Surrounding counties
-    "Kearny": (2, 3),
-    "Hodgeman": (5, 4),
-    "Edwards": (6, 4),
+    "Hamilton": (1, 4),
+    "Kearny": (2, 4),
+    "Scott": (3, 4),
+    "Lane": (4, 4),
+    "Ness": (5, 4),
+    "Hodgeman": (5, 3),
+    "Edwards": (6, 3),
     "Stanton": (1, 2),
     "Seward": (3, 1),
-    "Clark": (7, 2),
-    "Comanche": (7, 3)
+    "Meade": (4, 1),
+    "Clark": (5, 1),
+    "Comanche": (7, 1),
+    "Barber": (7, 2),
+    "Pratt": (7, 3),
 }
 
 # Create a figure and axis with proper size
