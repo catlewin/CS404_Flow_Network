@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Updated node display to better display large graphs and added new predefined tests to scalability" />
+    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Updated node display to better display large graphs and added new predefined tests to scalability">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KS_Measles_Network.py" beforeDir="false" afterPath="$PROJECT_DIR$/KS_Measles_Network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,7 +92,7 @@
       <workItem from="1745705960587" duration="6969000" />
       <workItem from="1745768447524" duration="95000" />
       <workItem from="1745768613817" duration="240000" />
-      <workItem from="1745768868139" duration="15915000" />
+      <workItem from="1745768868139" duration="16500000" />
     </task>
     <task id="LOCAL-00001" summary="no dif">
       <option name="closed" value="true" />
