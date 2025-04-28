@@ -70,11 +70,6 @@ class FlowNetwork:
         plt.figure(figsize=(12, 10))
         G = nx.DiGraph()
         n = len(self.graph)
-        node_labels = get_node_labels(n)
-
-        # Add nodes
-        for i in range(n):
-            G.add_node(i, label=node_labels[i])
 
         # Add edges with flow and capacity
         for i in range(n):
@@ -93,33 +88,41 @@ class FlowNetwork:
         nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=700, edgecolors='black')
         nx.draw_networkx_edges(G, pos, arrowsize=20, width=1.5)
 
-        # Node labels
-        node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
-        nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
+        # Only draw labels if there are 60 or fewer nodes
+        if n <= 60:
+            node_labels = get_node_labels(n)
 
-        # Edge labels
-        edge_labels = {}
-        for u, v, data in G.edges(data=True):
-            forward_flow = data.get('flow', 0)
-            backward_flow = G.edges[v, u].get('flow', 0) if G.has_edge(v, u) else 0
-            net_flow = forward_flow - backward_flow
-            edge_labels[(u, v)] = f"{net_flow}/{data['capacity']}"
+            # Add nodes
+            for i in range(n):
+                G.add_node(i, label=node_labels[i])
 
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
-                                     font_size=14, font_color='darkred',
-                                     bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=2),
-                                     font_weight='bold', label_pos=0.5)
+            # Node labels
+            node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
+            nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
 
-        source_label = node_labels[self.source]
-        sink_label = node_labels[self.sink]
+            # Edge labels
+            edge_labels = {}
+            for u, v, data in G.edges(data=True):
+                forward_flow = data.get('flow', 0)
+                backward_flow = G.edges[v, u].get('flow', 0) if G.has_edge(v, u) else 0
+                net_flow = forward_flow - backward_flow
+                edge_labels[(u, v)] = f"{net_flow}/{data['capacity']}"
 
-        # Update title to include max_flow if it's available
-        if max_flow is not None:
-            title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
-        else:
-            title = f"Flow Network (Source: {source_label}, Sink: {sink_label})"
+            nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
+                                         font_size=14, font_color='darkred',
+                                         bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=2),
+                                         font_weight='bold', label_pos=0.5)
 
-        plt.title(title, fontsize=18)
+            source_label = node_labels[self.source]
+            sink_label = node_labels[self.sink]
+
+            # Update title to include max_flow if it's available
+            if max_flow is not None:
+                title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
+            else:
+                title = f"Flow Network (Source: {source_label}, Sink: {sink_label})"
+
+            plt.title(title, fontsize=18)
 
         # If max_flow is provided, display it in a text box at the bottom of the graph
         if max_flow is not None:
@@ -176,17 +179,19 @@ def is_path_exists(graph, source, sink):
 
 def get_node_labels(num_vertices):
     labels = {}
-    uppercase = list(string.ascii_uppercase)
-    lowercase = list(string.ascii_lowercase)
+    alphabet = string.ascii_uppercase  # 'A' to 'Z'
+    base = len(alphabet)
+
     for i in range(num_vertices):
-        if i < len(uppercase):
-            labels[i] = uppercase[i]
-        elif i < len(uppercase) + len(lowercase):
-            labels[i] = lowercase[i - len(uppercase)]
-        else:
-            primary = (i - len(uppercase) - len(lowercase)) // len(uppercase) + 1
-            secondary = (i - len(uppercase) - len(lowercase)) % len(uppercase)
-            labels[i] = uppercase[primary - 1] + uppercase[secondary]
+        label = ''
+        index = i
+        while True:
+            label = alphabet[index % base] + label
+            index = index // base - 1
+            if index < 0:
+                break
+        labels[i] = label
+
     return labels
 
 
