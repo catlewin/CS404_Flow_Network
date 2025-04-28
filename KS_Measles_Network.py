@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon
 import matplotlib.patches as mpatches
+from matplotlib.colors import LinearSegmentedColormap
+from flow_network import FlowNetwork  # Import your custom class
 
 # Process the population data
 population_data = {
@@ -74,11 +76,11 @@ adjacency = {
     "Finney": [("Kearny", 2), ("Gray", 2), ("Haskell", 2), ("Grant", 2), ("Scott", 2), ("Lane", 2),
                ("Ness", 2), ("Hodgeman", 2)],
     "Ford": [("Gray", 2), ("Hodgeman", 2), ("Kiowa", 2), ("Edwards", 2), ("Clark", 2), ("Meade", 1)],
-    "Grant": [("Finney", 1), ("Kearny", 2), ("Stanton", 2), ("Hamilton", 1) ,("Haskell", 2),
+    "Grant": [("Finney", 1), ("Kearny", 2), ("Stanton", 2), ("Hamilton", 1), ("Haskell", 2),
               ("Stevens", 2), ("Morton", 1), ("Seward", 1)],
     "Gray": [("Finney", 6), ("Haskell", 6), ("Hodgeman", 3), ("Ford", 6), ("Meade", 6)],
     "Haskell": [("Finney", 10), ("Gray", 10), ("Kearny", 5), ("Seward", 10), ("Stevens", 5), ("Grant", 10),
-                ("Meade",3)],
+                ("Meade", 3)],
     "Kiowa": [("Barber", 3), ("Ford", 6), ("Edwards", 6), ("Comanche", 6), ("Clark", 3), ("Pratt", 6)],
     "Morton": [("Stanton", 2), ("Grant", 1), ("Stevens", 2)],
     "Stevens": [("Morton", 8), ("Grant", 8), ("Haskell", 4), ("Seward", 8), ("Stanton", 4)]
@@ -136,8 +138,113 @@ county_positions = {
     "Pratt": (7, 3),
 }
 
+# Add maximum flow calculation section
+print("\nMaximum Flow Analysis (Transmission Risk) using Ford-Fulkerson Algorithm:")
+print("--------------------------------------------------------------------")
+
+# Identify outbreak and surrounding counties
+outbreak_counties = [county for county, data in counties.items() if data["status"] == "Outbreak"]
+surrounding_counties = [county for county, data in counties.items() if data["status"] == "Surrounding"]
+
+# Calculate maximum flow from each outbreak county to each surrounding county
+flow_results = {}
+execution_times = {"ford_fulkerson": []}
+
+# Create adjacency matrix representation for the flow graph
+counties_list = list(counties.keys())
+n = len(counties_list)
+county_index = {county: i for i, county in enumerate(counties_list)}  # Map county names to indices
+
+# Initialize adjacency matrix with zeros
+adjacency_matrix = np.zeros((n, n))
+
+# Fill the matrix with capacities from our graph
+for u, v, data in G_flow.edges(data=True):
+    source_idx = county_index[u]
+    target_idx = county_index[v]
+    adjacency_matrix[source_idx][target_idx] = data['capacity']
+
+
+def get_node_labels(n):
+    """Return node labels (county names) for visualization"""
+    return counties_list
+
+
+for source in outbreak_counties:
+    for target in surrounding_counties:
+        if nx.has_path(G_flow, source, target):  # Check if there's a path between the counties
+            try:
+                # Get indices for source and target
+                source_idx = county_index[source]
+                target_idx = county_index[target]
+
+                # Use your FlowNetwork class
+                network = FlowNetwork(adjacency_matrix, source_idx, target_idx)
+                flow_value, exec_time = network.ford_fulkerson()
+
+                # Store the result
+                if target not in flow_results:
+                    flow_results[target] = []
+
+                flow_results[target].append((source, flow_value))
+                execution_times["ford_fulkerson"].append(exec_time)
+
+                print(f"Maximum transmission risk from {source} to {target}: {flow_value:.2f}")
+            except Exception as e:
+                print(f"Error calculating flow from {source} to {target}: {e}")
+
+# Calculate total risk for surrounding counties and major contributors
+total_flows = {}
+major_contributors = {}
+
+if flow_results:
+    print("\nSummarized Transmission Risk to Surrounding Counties:")
+    print("----------------------------------------------------")
+
+    # Calculate total incoming flow for each surrounding county
+    for target, sources in flow_results.items():
+        total_flow = sum(flow for _, flow in sources)
+        total_flows[target] = total_flow
+
+        # Find major contributor (source with highest flow)
+        if sources:
+            major_contributor = max(sources, key=lambda x: x[1])
+            major_contributors[target] = major_contributor
+
+    # Sort counties by total incoming flow
+    sorted_counties = sorted(total_flows.items(), key=lambda x: x[1], reverse=True)
+
+    # Print results
+    for county, flow in sorted_counties:
+        print(f"{county}: Total incoming transmission risk = {flow:.2f}")
+
+        # List major contributors (sources)
+        contributors = sorted(flow_results[county], key=lambda x: x[1], reverse=True)
+        for source, source_flow in contributors:
+            contribution_percent = (source_flow / flow) * 100
+            print(f"  - From {source}: {source_flow:.2f} ({contribution_percent:.1f}%)")
+
+# Store risk values in the county data for visualization
+for county in counties:
+    if county in total_flows:
+        counties[county]["risk"] = total_flows[county]
+        if county in major_contributors:
+            counties[county]["major_contributor"] = major_contributors[county][0]
+            counties[county]["contributor_flow"] = major_contributors[county][1]
+    else:
+        counties[county]["risk"] = 0
+
 # Create a figure and axis with proper size
 fig, ax = plt.subplots(figsize=(14, 12))
+
+# Find maximum case rate and maximum risk for color normalization
+max_case_rate = max(data["case_rate"] for data in counties.values())
+max_risk = 0
+if total_flows:
+    max_risk = max(total_flows.values())
+
+# Create a custom colormap for risk visualization
+risk_cmap = LinearSegmentedColormap.from_list('risk_cmap', ['#f7fbff', '#08306b'])
 
 
 # Define a simplified county shape (just a square for each county)
@@ -150,27 +257,31 @@ def create_county_patch(pos, width=0.8, height=0.8):
                    closed=True)
 
 
-# Find maximum case rate for color normalization
-max_case_rate = max(data["case_rate"] for data in counties.values())
-
 # Draw county boundaries
-county_colors = []
 for county, pos in county_positions.items():
     patch = create_county_patch(pos)
+    county_data = counties[county]
 
-    # Color based on status (outbreak or surrounding)
-    if counties[county]["status"] == "Outbreak":
-        # Normalize by max case rate for color intensity
-        color_intensity = counties[county]["case_rate"] / max_case_rate
+    # Color based on status and risk
+    if county_data["status"] == "Outbreak":
+        # Color outbreak counties based on case rate
+        color_intensity = county_data["case_rate"] / max_case_rate
         facecolor = plt.cm.YlOrRd(color_intensity)
-        county_colors.append(counties[county]["case_rate"])
         edgecolor = 'darkred'
         linewidth = 2
     else:
-        facecolor = 'lightgray'
-        county_colors.append(0)  # Zero case rate for surrounding counties
-        edgecolor = 'gray'
-        linewidth = 1
+        # Color surrounding counties based on incoming risk
+        if max_risk > 0 and county_data["risk"] > 0:
+            risk_intensity = county_data["risk"] / max_risk
+            facecolor = risk_cmap(risk_intensity)
+
+            # Thicker border for higher risk counties
+            linewidth = 1 + 2 * risk_intensity
+            edgecolor = 'navy'
+        else:
+            facecolor = 'lightgray'
+            edgecolor = 'gray'
+            linewidth = 1
 
     ax.add_patch(plt.Polygon(patch.get_xy(),
                              closed=True,
@@ -181,8 +292,8 @@ for county, pos in county_positions.items():
 
     # Add county name and info
     x, y = pos
-    pop = counties[county]["population"]
-    cases = counties[county]["cases"]
+    pop = county_data["population"]
+    cases = county_data["cases"]
 
     # Display county name
     ax.text(x, y + 0.15, county, ha='center', va='center', fontsize=10, fontweight='bold')
@@ -193,8 +304,15 @@ for county, pos in county_positions.items():
     # Display cases if any
     if cases > 0:
         ax.text(x, y - 0.2, f"Cases: {cases}", ha='center', va='center', fontsize=9, color='darkred')
-        ax.text(x, y - 0.3, f"Rate: {counties[county]['case_rate']:.1f}", ha='center', va='center', fontsize=8,
+        ax.text(x, y - 0.3, f"Rate: {county_data['case_rate']:.1f}", ha='center', va='center', fontsize=8,
                 color='darkred')
+
+    # Display risk for surrounding counties
+    if county_data["status"] == "Surrounding" and "risk" in county_data and county_data["risk"] > 0:
+        ax.text(x, y - 0.2, f"Risk: {county_data['risk']:.1f}", ha='center', va='center', fontsize=9, color='navy')
+        if "major_contributor" in county_data:
+            contributor = county_data["major_contributor"]
+            ax.text(x, y - 0.3, f"Main src: {contributor}", ha='center', va='center', fontsize=7, color='navy')
 
 # Draw edges to represent transmission risk
 for u, v, data in G_flow.edges(data=True):
@@ -232,18 +350,66 @@ for u, v, data in G_flow.edges(data=True):
                          alpha=min(capacity / 15, 0.7),
                          linewidth=capacity / 8)
 
+# Create special arrows for major contribution paths
+for county, data in counties.items():
+    if county in surrounding_counties and "major_contributor" in data and data["risk"] > 0:
+        source = data["major_contributor"]
+        target = county
+
+        if source in county_positions and target in county_positions:
+            source_pos = county_positions[source]
+            target_pos = county_positions[target]
+
+            # Calculate arrow properties
+            dx = target_pos[0] - source_pos[0]
+            dy = target_pos[1] - source_pos[1]
+
+            # Get flow value
+            flow_val = data["contributor_flow"]
+
+            # Calculate shortened start and end points
+            length = np.sqrt(dx ** 2 + dy ** 2)
+            if length > 0:
+                shrink_factor = 0.4 / length
+                new_dx = dx * (1 - shrink_factor)
+                new_dy = dy * (1 - shrink_factor)
+
+                # Draw the main contributor arrow in a different color
+                ax.arrow(source_pos[0] + dx * shrink_factor / 2,
+                         source_pos[1] + dy * shrink_factor / 2,
+                         new_dx, new_dy,
+                         head_width=0.12,
+                         head_length=0.12,
+                         fc='red',
+                         ec='red',
+                         length_includes_head=True,
+                         alpha=0.7,
+                         linewidth=flow_val / 6)
+
 # Create a legend
 outbreak_patch = mpatches.Patch(color='orange', label='Outbreak Counties')
-surrounding_patch = mpatches.Patch(color='lightgray', label='Surrounding Counties')
-arrow_patch = mpatches.Patch(color='blue', alpha=0.5, label='Transmission Risk')
-ax.legend(handles=[outbreak_patch, surrounding_patch, arrow_patch], loc='lower right')
+risk_patch = mpatches.Patch(color=risk_cmap(0.7), label='At-Risk Counties (blue intensity = risk level)')
+surrounding_patch = mpatches.Patch(color='lightgray', label='Low-Risk Surrounding Counties')
+arrow_patch = mpatches.Patch(color='blue', alpha=0.5, label='Transmission Path')
+major_arrow_patch = mpatches.Patch(color='red', alpha=0.7, label='Major Transmission Path')
 
-# Create a colorbar for the case rates - FIXED this part
-cmap = plt.cm.YlOrRd
-norm = plt.Normalize(0, max_case_rate)
-sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-sm.set_array([])  # Set an empty array
-cbar = fig.colorbar(sm, ax=ax, label='Case Rate per 10,000 Population')
+ax.legend(handles=[outbreak_patch, risk_patch, surrounding_patch, arrow_patch, major_arrow_patch],
+          loc='lower right', fontsize=9)
+
+# Create a colorbar for the outbreak case rates
+case_cmap = plt.cm.YlOrRd
+norm_case = plt.Normalize(0, max_case_rate)
+sm_case = plt.cm.ScalarMappable(cmap=case_cmap, norm=norm_case)
+sm_case.set_array([])  # Set an empty array
+cbar_case = fig.colorbar(sm_case, ax=ax, label='Case Rate per 10,000 Population', location='right', pad=0.01)
+
+# Create a second colorbar for the risk values
+if max_risk > 0:
+    norm_risk = plt.Normalize(0, max_risk)
+    sm_risk = plt.cm.ScalarMappable(cmap=risk_cmap, norm=norm_risk)
+    sm_risk.set_array([])  # Set an empty array
+    cbar_risk = fig.colorbar(sm_risk, ax=ax, label='Incoming Transmission Risk (Maximum Flow)',
+                             location='right', pad=0.07)
 
 # Set axis limits with some padding
 ax.set_xlim(0, 8)
@@ -258,8 +424,17 @@ ax.plot([0, 8, 8, 0, 0], [0, 0, 5, 5, 0], 'k-', linewidth=2)
 
 # Add title and subtitle
 ax.set_title("Measles Transmission Risk Network in Southwest Kansas", fontsize=16)
-plt.figtext(0.5, 0.01, "County grid layout approximates geographic positions",
+plt.figtext(0.5, 0.01,
+            "County grid layout approximates geographic positions. Risk calculated using Ford-Fulkerson algorithm.",
             ha='center', fontsize=10, style='italic')
+
+# Add a text box explaining the maximum flow analysis
+explanation_text = """Maximum Flow Analysis: 
+Risk values calculated using Ford-Fulkerson algorithm.
+Risk represents the maximum possible transmission capacity
+from outbreak counties to surrounding counties."""
+
+plt.figtext(0.02, 0.02, explanation_text, fontsize=9, bbox=dict(facecolor='white', alpha=0.7))
 
 # Show the plot
 plt.tight_layout()

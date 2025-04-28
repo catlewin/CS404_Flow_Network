@@ -62,7 +62,7 @@ class FlowNetwork:
         max_flow = sum(self.flow[self.source])
         execution_time = time.time() - start_time
 
-        self.visualize_network(flow=self.flow, max_flow=max_flow)
+        #self.visualize_network(flow=self.flow, max_flow=max_flow)
 
         return max_flow, execution_time
 

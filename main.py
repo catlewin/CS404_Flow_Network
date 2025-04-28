@@ -20,6 +20,7 @@ def run_predefined_tests():
         max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
         print(f"Maximum Flow: {max_flow}")
         print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
+        network.visualize_network(max_flow=max_flow)
 
 
 
@@ -43,6 +44,7 @@ def run_custom_test():
     max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
     print(f"Maximum Flow: {max_flow}")
     print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
+    network.visualize_network(max_flow=max_flow)
 
 
 
