@@ -424,7 +424,7 @@ ax.plot([0, 8, 8, 0, 0], [0, 0, 5, 5, 0], 'k-', linewidth=2)
 
 # Add title and subtitle
 ax.set_title("Measles Transmission Risk Network in Southwest Kansas", fontsize=16)
-plt.figtext(0.5, 0.01,
+plt.figtext(0.5, 0.005,
             "County grid layout approximates geographic positions. Risk calculated using Ford-Fulkerson algorithm.",
             ha='center', fontsize=10, style='italic')
 
@@ -434,7 +434,7 @@ Risk values calculated using Ford-Fulkerson algorithm.
 Risk represents the maximum possible transmission capacity
 from outbreak counties to surrounding counties."""
 
-plt.figtext(0.02, 0.02, explanation_text, fontsize=9, bbox=dict(facecolor='white', alpha=0.7))
+plt.figtext(0.02, 0.04, explanation_text, fontsize=9, bbox=dict(facecolor='white', alpha=0.7))
 
 # Show the plot
 plt.tight_layout()
