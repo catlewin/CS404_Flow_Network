@@ -103,10 +103,8 @@ class FlowNetwork:
             # Edge labels
             edge_labels = {}
             for u, v, data in G.edges(data=True):
-                forward_flow = data.get('flow', 0)
-                backward_flow = G.edges[v, u].get('flow', 0) if G.has_edge(v, u) else 0
-                net_flow = forward_flow - backward_flow
-                edge_labels[(u, v)] = f"{net_flow}/{data['capacity']}"
+                edge_labels[(u, v)] = f"{data.get('flow', 0):.0f}/{data['capacity']:.0f}"
+
 
             nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
                                          font_size=14, font_color='darkred',

@@ -21,7 +21,7 @@ def run_predefined_tests():
         max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
         print(f"Maximum Flow: {max_flow}")
         print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
-        network.visualize_network(max_flow=max_flow)
+        network.visualize_network(network.flow , max_flow=max_flow)
 
 def run_performance_tests():
     test_configs = [
@@ -55,7 +55,7 @@ def run_performance_tests():
 
         # Only visualize smaller networks
         if n <= 10:
-            network.visualize_network(max_flow=max_flow)
+            network.visualize_network(network.flow , max_flow=max_flow)
 
 
 def run_kansas_measles_analysis():
@@ -96,7 +96,7 @@ def run_custom_test():
     max_flow, execution_time = network.ford_fulkerson()  # Get both max flow and execution time
     print(f"Maximum Flow: {max_flow}")
     print(f"Execution Time: {execution_time:.6f} seconds")  # Display execution time
-    network.visualize_network(max_flow=max_flow)
+    network.visualize_network(network.flow , max_flow=max_flow)
 
 
 
