@@ -88,39 +88,37 @@ class FlowNetwork:
         nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=700, edgecolors='black')
         nx.draw_networkx_edges(G, pos, arrowsize=20, width=1.5)
 
-        # Only draw labels if there are 60 or fewer nodes
-        if n <= 60:
-            node_labels = get_node_labels(n)
+        node_labels = get_node_labels(n)
 
-            # Add nodes
-            for i in range(n):
-                G.add_node(i, label=node_labels[i])
+        # Add nodes
+        for i in range(n):
+            G.add_node(i, label=node_labels[i])
 
-            # Node labels
-            node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
-            nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
+        # Node labels
+        node_label_dict = {node: G.nodes[node]['label'] for node in G.nodes()}
+        nx.draw_networkx_labels(G, pos, labels=node_label_dict, font_size=16, font_weight='bold')
 
-            # Edge labels
-            edge_labels = {}
-            for u, v, data in G.edges(data=True):
-                edge_labels[(u, v)] = f"{data.get('flow', 0):.0f}/{data['capacity']:.0f}"
+        # Edge labels
+        edge_labels = {}
+        for u, v, data in G.edges(data=True):
+            edge_labels[(u, v)] = f"{data.get('flow', 0):.0f}/{data['capacity']:.0f}"
 
 
-            nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
-                                         font_size=14, font_color='darkred',
-                                         bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=2),
-                                         font_weight='bold', label_pos=0.5)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
+                                     font_size=14, font_color='darkred',
+                                     bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=2),
+                                     font_weight='bold', label_pos=0.5)
 
-            source_label = node_labels[self.source]
-            sink_label = node_labels[self.sink]
+        source_label = node_labels[self.source]
+        sink_label = node_labels[self.sink]
 
-            # Update title to include max_flow if it's available
-            if max_flow is not None:
-                title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
-            else:
-                title = f"Flow Network (Source: {source_label}, Sink: {sink_label})"
+        # Update title to include max_flow if it's available
+        if max_flow is not None:
+            title = f"Flow Network (Source: {source_label}, Sink: {sink_label}) - Maximum Flow: {max_flow:.0f}"
+        else:
+            title = f"Flow Network (Source: {source_label}, Sink: {sink_label})"
 
-            plt.title(title, fontsize=18)
+        plt.title(title, fontsize=18)
 
         # If max_flow is provided, display it in a text box at the bottom of the graph
         if max_flow is not None:

@@ -53,9 +53,6 @@ def run_performance_tests():
         print(f"Maximum Flow: {max_flow}")
         print(f"Execution Time: {execution_time:.6f} seconds")
 
-        # Only visualize smaller networks
-        if n <= 10:
-            network.visualize_network(network.flow , max_flow=max_flow)
 
 
 def run_kansas_measles_analysis():

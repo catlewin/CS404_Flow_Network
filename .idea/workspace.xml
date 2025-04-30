@@ -50,6 +50,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python tests.Doctests in nx_pylab.executor": "Run",
     "Python.KS_Measles_Network.executor": "Run",
     "Python.TEST.executor": "Run",
     "Python.epidemic_network.executor": "Run",
@@ -90,7 +91,8 @@
       <workItem from="1745705960587" duration="6969000" />
       <workItem from="1745768447524" duration="95000" />
       <workItem from="1745768613817" duration="240000" />
-      <workItem from="1745768868139" duration="19186000" />
+      <workItem from="1745768868139" duration="19226000" />
+      <workItem from="1745934092458" duration="3691000" />
     </task>
     <task id="LOCAL-00001" summary="no dif">
       <option name="closed" value="true" />
@@ -238,11 +240,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="Updated visualization calls in main to include flow. Changed visualize_network to only calculate forward flow." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$Doctests_in_nx_pylab.coverage" NAME="Doctests in nx_pylab Coverage Results" MODIFIED="1745977785661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/PythonProject/.venv/lib/python3.11/site-packages/networkx/drawing" />
     <SUITE FILE_PATH="coverage/PythonProject$main.coverage" NAME="main Coverage Results" MODIFIED="1745592390630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$flow_network.coverage" NAME="flow_network Coverage Results" MODIFIED="1745711431497" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$TEST.coverage" NAME="TEST Coverage Results" MODIFIED="1745770735849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$epidemic_network.coverage" NAME="epidemic_network Coverage Results" MODIFIED="1745774852357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$KS_Measles_Network.coverage" NAME="KS_Measles_Network Coverage Results" MODIFIED="1745853585506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745933331632" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745977833641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
