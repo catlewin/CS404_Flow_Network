@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Fixed visualization error for performance tests call" />
+    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Fixed KS visualization -- 2 counties were overlapping." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,7 +90,7 @@
       <workItem from="1745768447524" duration="95000" />
       <workItem from="1745768613817" duration="240000" />
       <workItem from="1745768868139" duration="19226000" />
-      <workItem from="1745934092458" duration="4379000" />
+      <workItem from="1745934092458" duration="4900000" />
     </task>
     <task id="LOCAL-00001" summary="no dif">
       <option name="closed" value="true" />
@@ -228,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745978303500</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Fixed KS visualization -- 2 counties were overlapping.">
+      <option name="closed" value="true" />
+      <created>1745980679848</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1745980679848</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -263,7 +271,8 @@
     <MESSAGE value="Added KS measles to main options. Formated KS_Measles_Network.py to be callable in main." />
     <MESSAGE value="Updated visualization calls in main to include flow. Changed visualize_network to only calculate forward flow." />
     <MESSAGE value="Fixed visualization error for performance tests call" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed visualization error for performance tests call" />
+    <MESSAGE value="Fixed KS visualization -- 2 counties were overlapping." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed KS visualization -- 2 counties were overlapping." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$Doctests_in_nx_pylab.coverage" NAME="Doctests in nx_pylab Coverage Results" MODIFIED="1745977785661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/PythonProject/.venv/lib/python3.11/site-packages/networkx/drawing" />
@@ -272,6 +281,6 @@
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$TEST.coverage" NAME="TEST Coverage Results" MODIFIED="1745770735849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$epidemic_network.coverage" NAME="epidemic_network Coverage Results" MODIFIED="1745774852357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$KS_Measles_Network.coverage" NAME="KS_Measles_Network Coverage Results" MODIFIED="1745853585506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745978184403" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745979658036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
