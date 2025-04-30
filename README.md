@@ -1,6 +1,7 @@
 # Measels in Southwest Kansas
 
 **A Maximum Flow Application**
+________
 
 **Introduction**
 
@@ -26,3 +27,23 @@ The scope of this project encompasses:
 _Kansas Measles Outbreak Context_
 
 In 2024, there were no cases of measles in Kansas. In contrast, as of April 2025, there have been 37 cases of measles in Southwest Kansas, as reported by the Kansas Department of Health and Environment. This follows national trends of measles cases surging: from 285 in 2024 to 884 in 2025, as reported by the CDC. In Kansas, 30 of the 37 cases are residents under 18 years old.
+
+**Methodology**
+
+This project originated from coursework in CS404 Introduction to Algorithms & Complexity, where my foundational understanding of Ford-Fulkerson was established. From here, my interest in epidemiology inspired me to create a more specific algorithm for epidemics. 
+
+_Data Sources:_
+
+For the Kansas County measles application, I used two data sources:
+- Kansas Department of Health and Environment’s Division of Public Health report on Kansas’ 2025 Measles Outbreak. 
+- US Census’ Annual Estimates of the Resident Population for Counties in Kansas.
+
+_Program Creation:_
+
+Development Tools & Libraries:
+- _Language:_ Python
+- _IDE & Version Control:_ PyCharm, GitHub
+- _Libraries:_ networkx, matplotlib, numpy, collections.deque, random, time, and string
+- _AI Tools for code generation:_ Claude.ai & ChatGPT
+
+I started by creating a general ford-fulkerson algorithm for a graph network. From there, I implemented an inherited class for an epidemic network to model likelihood of infection. Finally, I programmed a more specific application for the Kansas measles outbreak to model the likelihood of infection using flow networks to represent flow of infection.
