@@ -46,4 +46,47 @@ Development Tools & Libraries:
 - _Libraries:_ networkx, matplotlib, numpy, collections.deque, random, time, and string
 - _AI Tools for code generation:_ Claude.ai & ChatGPT
 
-I started by creating a general ford-fulkerson algorithm for a graph network. From there, I implemented an inherited class for an epidemic network to model likelihood of infection. Finally, I programmed a more specific application for the Kansas measles outbreak to model the likelihood of infection using flow networks to represent flow of infection.
+I started by creating a general ford-fulkerson algorithm for a graph network. From there, I implemented an inherited class for an epidemic network to model likelihood of infection. Finally, I programmed a more specific application for the Kansas measles outbreak to model the flow of measles between counties.
+
+**Content**
+
+_Overview of Program_
+
+Program Architecture
+
+_1. Flow Network:_ A general graph-based flow simulator with predefined tests. Each graph has a set number of nodes, a minimum and maximum capacity for the graph’s edges, and a density between 0-1 defining the likelihood of edges between the nodes, 0 meaning no nodes are connecting and 1 indicating all nodes are connected.
+- Small: 5 nodes, minimum capacity 1, maximum capacity 15, with density 0.4.
+- Medium :8 nodes, minimum capacity 1, maximum capacity 20, with density 0.3.
+- Large: 12 nodes, minimum capacity 1, maximum capacity 30, with density 0.2.
+
+_2. Flow Network Performance Tests:_ An option to benchmark the performance of the maximum flow analysis with a graph of 10, 100, and 1,000 nodes, running each with density 0.1, 0.5, and 1.0.
+
+_3. Kansas Measles Network:_
+- Nodes: Kansas Counties
+- Sources: Counties with confirmed cases
+- Sinks: Adjacent counties
+- Edge Weights: Based on adjacency, case count, and population
+- Objection: Analyze likelihood of disease spread to neighboring counties
+
+_4. Custom Random Network:_ Graph and flow created by user-defined vertex count, capacity, and density.
+
+_5. Epidemic Network:_ This extends the Flow Network with epidemiological framing:
+- Nodes: Individuals
+- Source: Original infection case
+- Sink: Individual being analyzed for likelihood of infections
+- Parameters: As currently implemented, the graph is randomly generated with the following settings:
+
+      num_vertices = 10  # Number of vertices in the epidemic network
+      min_capacity = 1
+      max_capacity = 20
+      density = 0.3  # 30% density for the network
+      infection_prob = 0.1  # Probability of infection spread between nodes
+
+Visualization
+
+The graphs are visualized using matplotlib. While the flow and epidemic networks are visualized with traditional graphs, the Kansas network is modeled to look more similar to the layout of the state map.
+
+_Results_
+
+Flow Network Predefined Tests
+
