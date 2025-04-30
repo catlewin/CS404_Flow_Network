@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Updated visualization calls in main to include flow. Changed visualize_network to only calculate forward flow.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="9b9e0bd3-2beb-4a5d-a31f-6f01cce5a96a" name="Changes" comment="Fixed visualization error for performance tests call" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,7 +90,7 @@
       <workItem from="1745768447524" duration="95000" />
       <workItem from="1745768613817" duration="240000" />
       <workItem from="1745768868139" duration="19226000" />
-      <workItem from="1745934092458" duration="3691000" />
+      <workItem from="1745934092458" duration="4075000" />
     </task>
     <task id="LOCAL-00001" summary="no dif">
       <option name="closed" value="true" />
@@ -214,7 +212,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745933401257</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Fixed visualization error for performance tests call">
+      <option name="closed" value="true" />
+      <created>1745978232686</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1745978232686</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +243,8 @@
     <MESSAGE value="Updated node display to better display large graphs and added new predefined tests to scalability" />
     <MESSAGE value="Added KS measles to main options. Formated KS_Measles_Network.py to be callable in main." />
     <MESSAGE value="Updated visualization calls in main to include flow. Changed visualize_network to only calculate forward flow." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated visualization calls in main to include flow. Changed visualize_network to only calculate forward flow." />
+    <MESSAGE value="Fixed visualization error for performance tests call" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed visualization error for performance tests call" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$Doctests_in_nx_pylab.coverage" NAME="Doctests in nx_pylab Coverage Results" MODIFIED="1745977785661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/PythonProject/.venv/lib/python3.11/site-packages/networkx/drawing" />
@@ -246,6 +253,6 @@
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$TEST.coverage" NAME="TEST Coverage Results" MODIFIED="1745770735849" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$epidemic_network.coverage" NAME="epidemic_network Coverage Results" MODIFIED="1745774852357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CS404_Flow_Network$KS_Measles_Network.coverage" NAME="KS_Measles_Network Coverage Results" MODIFIED="1745853585506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745977833641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS404_Flow_Network$main.coverage" NAME="main Coverage Results" MODIFIED="1745978184403" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
