@@ -129,7 +129,7 @@ def analyze_kansas_measles(show_plot=True):
     county_positions = {
         # Outbreak counties
         "Finney": (3, 3),
-        "Ford": (5, 3),
+        "Ford": (5, 2),
         "Grant": (2, 3),
         "Gray": (4, 3),
         "Haskell": (3, 2),
