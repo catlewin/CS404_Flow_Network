@@ -90,3 +90,31 @@ _Results_
 
 Flow Network Predefined Tests
 
+            Small 
+                  Nodes 5
+                  Minimum capacity 1
+                  Maximum capacity 15
+                  Density 0.4
+                  Calculated max flow: 1
+
+<img width="748" alt="Screen Shot 2025-04-27 at 2 24 14 PM" src="https://github.com/user-attachments/assets/c6500bff-16da-475a-9ec7-0e1bf59c3bfd" />
+
+            Medium 
+                  Nodes 8
+                  Minimum capacity 1
+                  Maximum capacity 20
+                  Density 0.3
+                  Calculated max flow: 21
+
+
+<img width="748" alt="Screen Shot 2025-04-27 at 2 24 28 PM" src="https://github.com/user-attachments/assets/2d9b754e-9eec-4710-b409-e8686750906d" />
+
+            Large 
+                  Nodes 12
+                  Minimum capacity 1
+                  Maximum capacity 30
+                  Density 0.2
+                  Calculated max flow: 18
+
+
+<img width="748" alt="Screen Shot 2025-04-27 at 2 24 37 PM" src="https://github.com/user-attachments/assets/7d2b81c4-3286-464c-9fcb-ff03c43b22e7" />
